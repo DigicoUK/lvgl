@@ -149,6 +149,25 @@ e.g. "stm32f769xx.h" or "stm32f429xx.h"*/
 /*Use NXP's VG-Lite GPU iMX RTxxx platforms*/
 #define LV_USE_GPU_NXP_VG_LITE   0
 
+/*Use SDL renderer API*/
+#ifndef LV_USE_GPU_SDL
+#  ifdef CONFIG_LV_USE_GPU_SDL
+#    define LV_USE_GPU_SDL CONFIG_LV_USE_GPU_SDL
+#  else
+#    define  LV_USE_GPU_SDL   0
+#  endif
+#endif
+#if LV_USE_GPU_SDL
+#  define LV_USE_EXTERNAL_RENDERER 1
+#  ifndef LV_GPU_SDL_INCLUDE
+#    define LV_GPU_SDL_INCLUDE_PATH <SDL2/SDL.h>
+#  endif
+#endif
+
+#ifndef LV_USE_EXTERNAL_RENDERER
+#  define LV_USE_EXTERNAL_RENDERER 0
+#endif
+
 /*-------------
  * Logging
  *-----------*/
@@ -225,7 +244,7 @@ e.g. "stm32f769xx.h" or "stm32f429xx.h"*/
 #define LV_USE_USER_DATA      1
 
 /*Garbage Collector settings
- *Used if lvgl is binded to higher level language and the memory is managed by that language*/
+ *Used if lvgl is bound to higher level language and the memory is managed by that language*/
 #define LV_ENABLE_GC 0
 #if LV_ENABLE_GC != 0
 #  define LV_GC_INCLUDE "gc.h"                           /*Include Garbage Collector related things*/
@@ -517,6 +536,44 @@ e.g. "stm32f769xx.h" or "stm32f429xx.h"*/
 
 /*A layout similar to Grid in CSS.*/
 #define LV_USE_GRID     1
+
+/*---------------------
+ * 3rd party libraries
+ *--------------------*/
+
+/*File system interfaces for common APIs
+ *To enable set a driver letter for that API*/
+#define LV_USE_FS_STDIO '\0'        /*Uses fopen, fread, etc*/
+//#define LV_FS_STDIO_PATH "/home/john/"    /*Set the working directory. If commented it will be "./" */
+
+#define LV_USE_FS_POSIX '\0'        /*Uses open, read, etc*/
+//#define LV_FS_POSIX_PATH "/home/john/"    /*Set the working directory. If commented it will be "./" */
+
+#define LV_USE_FS_FATFS '\0'        /*Uses f_open, f_read, etc*/
+
+/*PNG decoder library*/
+#define LV_USE_PNG      0
+
+/*BMP decoder library*/
+#define LV_USE_BMP      0
+
+/* JPG + split JPG decoder library.
+ * Split JPG is a custom format optimized for embedded systems. */
+#define LV_USE_SJPG     0
+
+/*GIF decoder library*/
+#define LV_USE_GIF      0
+
+/*QR code library*/
+#define LV_USE_QRCODE   0
+
+/*FreeType library*/
+#define LV_USE_FREETYPE 0
+#if LV_USE_FREETYPE
+/*Memory used by FreeType to cache characters [bytes] (-1: no caching)*/
+# define LV_FREETYPE_CACHE_SIZE  (16 * 1024)
+#endif
+
 
 /*==================
 * EXAMPLES
