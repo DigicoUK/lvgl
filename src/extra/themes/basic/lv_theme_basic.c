@@ -93,7 +93,7 @@ static void style_init(void)
     lv_style_set_bg_opa(&styles->light, LV_OPA_COVER);
     lv_style_set_bg_color(&styles->light, COLOR_LIGHT);
     lv_style_set_border_color(&styles->light, COLOR_MID);
-    lv_style_set_border_width(&styles->light, 1);
+    lv_style_set_border_width(&styles->light, 0);
     lv_style_set_pad_all(&styles->light, PAD_DEF);
     lv_style_set_pad_gap(&styles->light, PAD_DEF / 2);
     lv_style_set_line_width(&styles->light, LV_DPX(2));
@@ -105,7 +105,7 @@ static void style_init(void)
     lv_style_set_bg_opa(&styles->dark, LV_OPA_COVER);
     lv_style_set_bg_color(&styles->dark, COLOR_DARK);
     lv_style_set_border_color(&styles->dark, COLOR_DIM);
-    lv_style_set_border_width(&styles->dark, 1);
+    lv_style_set_border_width(&styles->dark, 0);
     lv_style_set_pad_all(&styles->dark, PAD_DEF);
     lv_style_set_pad_gap(&styles->dark, PAD_DEF / 2);
     lv_style_set_line_width(&styles->dark, LV_DPX(2));
