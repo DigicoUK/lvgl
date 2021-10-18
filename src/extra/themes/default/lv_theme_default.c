@@ -29,7 +29,7 @@
 #define DARK_COLOR_TEXT        lv_palette_lighten(LV_PALETTE_GREY, 5)
 #define DARK_COLOR_GREY        lv_color_hex(0x2f3237)
 
-#define TRANSITION_TIME         LV_THEME_DEFAULT_TRANSITON_TIME
+#define TRANSITION_TIME         LV_THEME_DEFAULT_TRANSITION_TIME
 #define BORDER_WIDTH            lv_disp_dpx(theme.disp, 2)
 #define OUTLINE_WIDTH           lv_disp_dpx(theme.disp, 3)
 
@@ -479,7 +479,7 @@ static void style_init(void)
     style_init_reset(&styles->ta_cursor);
     lv_style_set_border_color(&styles->ta_cursor, color_text);
     lv_style_set_border_width(&styles->ta_cursor, lv_disp_dpx(theme.disp, 2));
-    lv_style_set_pad_left(&styles->ta_cursor, lv_disp_dpx(theme.disp, 1));
+    lv_style_set_pad_left(&styles->ta_cursor, - lv_disp_dpx(theme.disp, 1));
     lv_style_set_border_side(&styles->ta_cursor, LV_BORDER_SIDE_LEFT);
     lv_style_set_anim_time(&styles->ta_cursor, 400);
 
