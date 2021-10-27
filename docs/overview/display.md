@@ -53,9 +53,11 @@ A screen's size is always equal to its display and their origin is (0;0). Theref
 
 A screen can be created from any object type but the two most typical types are [Base object](/widgets/obj) and [Image](/widgets/core/img) (to create a wallpaper).
 
-To create a screen, use `lv_obj_t * scr = lv_<type>_create(NULL, copy)`. `copy` can be an existing screen copied into the new screen.
+To create a screen, use `lv_obj_t * scr = lv_<type>_create(NULL)`. This will assign the screen to the display that is set as default when the screen is created.
 
-To load a screen, use `lv_scr_load(scr)`. To get the active screen, use `lv_scr_act()`. These functions work on the default display. If you want to specify which display to work on, use `lv_disp_get_scr_act(disp)` and `lv_disp_load_scr(disp, scr)`. A screen can be loaded with animations too. Read more [here](object.html#load-screens).
+To load a screen, use `lv_scr_load(scr)`. This will load the screen the display that it was assigned to. A screen can be loaded with animations too. Read more [here](object.html#load-screens).
+
+To get the active screen, use `lv_scr_act()`. This function works on the default display. If you want to specify which display to work on, use `lv_disp_get_scr_act(disp)`. 
 
 Screens can be deleted with `lv_obj_del(scr)`, but ensure that you do not delete the currently loaded screen.
 
@@ -65,7 +67,7 @@ Usually, the opacity of the screen is `LV_OPA_COVER` to provide a solid backgrou
 See the [Display background](#display-background) section for more details. If the display's background opacity is also not `LV_OPA_COVER` LVGL has no solid background to draw. 
 
 This configuration (transparent screen and display) could be used to create for example OSD menus where a video is played on a lower layer, and a menu is overlayed on an upper layer.
- 
+
 To handle transparent displays, special (slower) color mixing algorithms need to be used by LVGL so this feature needs to enabled with `LV_COLOR_SCREEN_TRANSP` in `lv_conf.h`. 
 As this mode operates on the Alpha channel of the pixels `LV_COLOR_DEPTH = 32` is also required. The Alpha channel of 32-bit colors will be 0 where there are no objects and 255 where there are solid objects.
 
