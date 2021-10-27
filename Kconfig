@@ -779,6 +779,13 @@ menu "LVGL configuration"
             string "Set the working directory"
             depends on LV_USE_FS_POSIX
 
+        config LV_USE_FS_WIN32
+            int "File system on top of Win32 API"
+            default 0
+        config LV_FS_WIN32_PATH
+            string "Set the working directory"
+            depends on LV_USE_FS_WIN32
+
         config LV_USE_FS_FATFS
             int "File system on top of FatFS"
             default 0
@@ -804,6 +811,9 @@ menu "LVGL configuration"
             int "Memory used by FreeType to cache characters [bytes] (-1: no caching)"
             depends on LV_USE_FREETYPE
             default 16384
+
+        config LV_USE_RLOTTIE
+            bool "Lottie library"
     endmenu
 
     menu "Others"

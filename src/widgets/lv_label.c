@@ -144,7 +144,7 @@ void lv_label_set_text(lv_obj_t * obj, const char * text)
     lv_label_refr_text(obj);
 }
 
-LV_FORMAT_ATTRIBUTE(2, 3) void lv_label_set_text_fmt(lv_obj_t * obj, const char * fmt, ...)
+void lv_label_set_text_fmt(lv_obj_t * obj, const char * fmt, ...)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
     LV_ASSERT_NULL(fmt);
@@ -238,8 +238,8 @@ void lv_label_set_text_sel_start(lv_obj_t * obj, uint32_t index)
     label->sel_start   = index;
     lv_obj_invalidate(obj);
 #else
-    (void)obj;    /*Unused*/
-    (void)index;    /*Unused*/
+    LV_UNUSED(obj);    /*Unused*/
+    LV_UNUSED(index);  /*Unused*/
 #endif
 }
 
@@ -351,7 +351,7 @@ void lv_label_get_letter_pos(const lv_obj_t * obj, uint32_t char_id, lv_point_t 
     char * mutable_bidi_txt = NULL;
     /*Handle Bidi*/
     if(new_line_start == byte_id) {
-        visual_byte_pos = byte_id - line_start;
+        visual_byte_pos = 0;
         bidi_txt =  &txt[line_start];
     }
     else {
@@ -656,18 +656,7 @@ void lv_label_ins_text(lv_obj_t * obj, uint32_t pos, const char * txt)
         pos = _lv_txt_get_encoded_length(label->text);
     }
 
-#if LV_USE_BIDI
-    char * bidi_buf = lv_mem_buf_get(ins_len + 1);
-    LV_ASSERT_MALLOC(bidi_buf);
-    if(bidi_buf == NULL) return;
-
-    _lv_bidi_process(txt, bidi_buf, lv_obj_get_style_base_dir(obj, LV_PART_MAIN));
-    _lv_txt_ins(label->text, pos, bidi_buf);
-
-    lv_mem_buf_release(bidi_buf);
-#else
     _lv_txt_ins(label->text, pos, txt);
-#endif
     lv_label_set_text(obj, NULL);
 }
 
@@ -756,6 +745,15 @@ static void lv_label_event(const lv_obj_class_t * class_p, lv_event_t * e)
         /*Revert dots for proper refresh*/
         lv_label_revert_dots(obj);
         lv_label_refr_text(obj);
+    }
+    else if(code == LV_EVENT_REFR_EXT_DRAW_SIZE) {
+        /* Italic or other non-typical letters can be drawn of out of the object.
+         * It happens if box_w + ofs_x > adw_w in the glyph.
+         * To avoid this add some extra draw area.
+         * font_h / 4 is an empirical value. */
+        const lv_font_t * font = lv_obj_get_style_text_font(obj, LV_PART_MAIN);
+        lv_coord_t font_h = lv_font_get_line_height(font);
+        lv_event_set_ext_draw_size(e, font_h / 4);
     }
     else if(code == LV_EVENT_SIZE_CHANGED) {
         lv_label_revert_dots(obj);
@@ -849,7 +847,11 @@ static void draw_main(lv_event_t * e)
         txt_coords.y2 = obj->coords.y2;
     }
 
-    lv_draw_label(&txt_coords, clip_area, &label_draw_dsc, label->text, hint);
+    if(label->long_mode == LV_LABEL_LONG_SCROLL || label->long_mode == LV_LABEL_LONG_SCROLL_CIRCULAR) {
+        lv_draw_label(&txt_coords, &txt_clip, &label_draw_dsc, label->text, hint);
+    } else {
+        lv_draw_label(&txt_coords, clip_area, &label_draw_dsc, label->text, hint);
+    }
 
     if(label->long_mode == LV_LABEL_LONG_SCROLL_CIRCULAR) {
         lv_point_t size;
@@ -862,7 +864,7 @@ static void draw_main(lv_event_t * e)
                                    lv_font_get_glyph_width(label_draw_dsc.font, ' ', ' ') * LV_LABEL_WAIT_CHAR_COUNT;
             label_draw_dsc.ofs_y = label->offset.y;
 
-            lv_draw_label(&txt_coords, clip_area, &label_draw_dsc, label->text, hint);
+            lv_draw_label(&txt_coords, &txt_clip, &label_draw_dsc, label->text, hint);
         }
 
         /*Draw the text again below the original to make a circular effect */
@@ -870,7 +872,7 @@ static void draw_main(lv_event_t * e)
             label_draw_dsc.ofs_x = label->offset.x;
             label_draw_dsc.ofs_y = label->offset.y + size.y + lv_font_get_line_height(label_draw_dsc.font);
 
-            lv_draw_label(&txt_coords, clip_area, &label_draw_dsc, label->text, hint);
+            lv_draw_label(&txt_coords, &txt_clip, &label_draw_dsc, label->text, hint);
         }
     }
 }

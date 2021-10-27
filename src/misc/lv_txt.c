@@ -433,7 +433,7 @@ void _lv_txt_cut(char * txt, uint32_t pos, uint32_t len)
     }
 }
 
-LV_FORMAT_ATTRIBUTE(1, 0) char * _lv_txt_set_text_vfmt(const char * fmt, va_list ap)
+char * _lv_txt_set_text_vfmt(const char * fmt, va_list ap)
 {
     /*Allocate space for the new text by using trick from C99 standard section 7.19.6.12*/
     va_list ap_copy;
@@ -743,7 +743,7 @@ static uint32_t lv_txt_utf8_get_length(const char * txt)
  */
 static uint8_t lv_txt_iso8859_1_size(const char * str)
 {
-    (void)str; /*Unused*/
+    LV_UNUSED(str); /*Unused*/
     return 1;
 }
 

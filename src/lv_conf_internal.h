@@ -356,7 +356,7 @@ e.g. "stm32f769xx.h" or "stm32f429xx.h"*/
 #  endif
 #endif
 
-/*Use SDL renderer API*/
+/*Use SDL renderer API. Requires LV_USE_EXTERNAL_RENDERER*/
 #ifndef LV_USE_GPU_SDL
 #  ifdef CONFIG_LV_USE_GPU_SDL
 #    define LV_USE_GPU_SDL CONFIG_LV_USE_GPU_SDL
@@ -1562,6 +1562,15 @@ e.g. "stm32f769xx.h" or "stm32f429xx.h"*/
 #endif
 //#define LV_FS_POSIX_PATH "/home/john/"    /*Set the working directory. If commented it will be "./" */
 
+#ifndef LV_USE_FS_WIN32
+#  ifdef CONFIG_LV_USE_FS_WIN32
+#    define LV_USE_FS_WIN32 CONFIG_LV_USE_FS_WIN32
+#  else
+#    define LV_USE_FS_WIN32 '\0'        /*Uses CreateFile, ReadFile, etc*/
+#  endif
+#endif
+//#define LV_FS_WIN32_PATH "C:\\Users\\john\\"    /*Set the working directory. If commented it will be ".\\" */
+
 #ifndef LV_USE_FS_FATFS
 #  ifdef CONFIG_LV_USE_FS_FATFS
 #    define LV_USE_FS_FATFS CONFIG_LV_USE_FS_FATFS
@@ -1633,6 +1642,15 @@ e.g. "stm32f769xx.h" or "stm32f429xx.h"*/
 #    define LV_FREETYPE_CACHE_SIZE (16 * 1024)
 #  endif
 #endif
+#endif
+
+/*Rlottie library*/
+#ifndef LV_USE_RLOTTIE
+#  ifdef CONFIG_LV_USE_RLOTTIE
+#    define LV_USE_RLOTTIE CONFIG_LV_USE_RLOTTIE
+#  else
+#    define LV_USE_RLOTTIE 0
+#  endif
 #endif
 
 /*-----------

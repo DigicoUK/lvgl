@@ -152,7 +152,7 @@ e.g. "stm32f769xx.h" or "stm32f429xx.h"*/
 /*Use exnternal renderer*/
 #define LV_USE_EXTERNAL_RENDERER 0
 
-/*Use SDL renderer API*/
+/*Use SDL renderer API. Requires LV_USE_EXTERNAL_RENDERER*/
 #define LV_USE_GPU_SDL 0
 #if LV_USE_GPU_SDL
 #  define LV_GPU_SDL_INCLUDE_PATH <SDL2/SDL.h>
@@ -536,6 +536,9 @@ e.g. "stm32f769xx.h" or "stm32f429xx.h"*/
 #define LV_USE_FS_POSIX '\0'        /*Uses open, read, etc*/
 //#define LV_FS_POSIX_PATH "/home/john/"    /*Set the working directory. If commented it will be "./" */
 
+#define LV_USE_FS_WIN32 '\0'        /*Uses CreateFile, ReadFile, etc*/
+//#define LV_FS_WIN32_PATH "C:\\Users\\john\\"    /*Set the working directory. If commented it will be ".\\" */
+
 #define LV_USE_FS_FATFS '\0'        /*Uses f_open, f_read, etc*/
 
 /*PNG decoder library*/
@@ -560,6 +563,9 @@ e.g. "stm32f769xx.h" or "stm32f429xx.h"*/
 /*Memory used by FreeType to cache characters [bytes] (-1: no caching)*/
 # define LV_FREETYPE_CACHE_SIZE (16 * 1024)
 #endif
+
+/*Rlottie library*/
+#define LV_USE_RLOTTIE 0
 
 /*-----------
  * Others
