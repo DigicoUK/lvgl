@@ -30,7 +30,7 @@
  **********************/
 static void anim_timer(lv_timer_t * param);
 static void anim_mark_list_change(void);
-static void anim_ready_handler(lv_anim_t * a);
+static void anim_ready_handler(lv_anim_t * a, int time_spill);
 
 /**********************
  *  STATIC VARIABLES
@@ -381,7 +381,12 @@ static void anim_timer(lv_timer_t * param)
             }
             a->act_time += elaps;
             if(a->act_time >= 0) {
-                if(a->act_time > a->time) a->act_time = a->time;
+                int time_spill;
+                if(a->act_time > a->time)
+                {
+                	time_spill = a->act_time - a->time;
+                	a->act_time = a->time;
+                }
 
                 int32_t new_value;
                 new_value = a->path_cb(a);
@@ -394,7 +399,7 @@ static void anim_timer(lv_timer_t * param)
 
                 /*If the time is elapsed the animation is ready*/
                 if(a->act_time >= a->time) {
-                    anim_ready_handler(a);
+                    anim_ready_handler(a, time_spill);
                 }
             }
         }
@@ -415,7 +420,7 @@ static void anim_timer(lv_timer_t * param)
  * e.g. repeat, play back, delete etc.
  * @param a pointer to an animation descriptor
  */
-static void anim_ready_handler(lv_anim_t * a)
+static void anim_ready_handler(lv_anim_t * a, int time_spill)
 {
     /*In the end of a forward anim decrement repeat cnt.*/
     if(a->playback_now == 0 && a->repeat_cnt > 0 && a->repeat_cnt != LV_ANIM_REPEAT_INFINITE) {
@@ -440,11 +445,11 @@ static void anim_ready_handler(lv_anim_t * a)
     }
     /*If the animation is not deleted then restart it*/
     else {
-        a->act_time = -(int32_t)(a->repeat_delay); /*Restart the animation*/
+        a->act_time = -(int32_t)(a->repeat_delay) + time_spill; /*Restart the animation*/
         /*Swap the start and end values in play back mode*/
         if(a->playback_time != 0) {
             /*If now turning back use the 'playback_pause*/
-            if(a->playback_now == 0) a->act_time = -(int32_t)(a->playback_delay);
+            if(a->playback_now == 0) a->act_time = -(int32_t)(a->playback_delay) + time_spill;
 
             /*Toggle the play back state*/
             a->playback_now = a->playback_now == 0 ? 1 : 0;
