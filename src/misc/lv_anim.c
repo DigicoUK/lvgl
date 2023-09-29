@@ -363,7 +363,7 @@ static void anim_timer(lv_timer_t * param)
          * happened in `anim_ready_handler` which could make this linked list reading corrupt
          * because the list is changed meanwhile
          */
-        anim_list_changed = false;
+    	anim_list_changed = false;
 
         if(a->run_round != anim_run_round) {
             a->run_round = anim_run_round; /*The list readying might be reset so need to know which anim has run already*/
@@ -381,7 +381,7 @@ static void anim_timer(lv_timer_t * param)
             }
             a->act_time += elaps;
             if(a->act_time >= 0) {
-                int time_spill;
+                uint32_t time_spill = 0;
                 if(a->act_time > a->time)
                 {
                 	time_spill = a->act_time - a->time;
