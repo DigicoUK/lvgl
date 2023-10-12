@@ -30,7 +30,7 @@
  **********************/
 static void anim_timer(lv_timer_t * param);
 static void anim_mark_list_change(void);
-static void anim_ready_handler(lv_anim_t * a, int time_spill);
+static void anim_ready_handler(lv_anim_t * a, int32_t time_spill);
 
 /**********************
  *  STATIC VARIABLES
@@ -381,7 +381,7 @@ static void anim_timer(lv_timer_t * param)
             }
             a->act_time += elaps;
             if(a->act_time >= 0) {
-                uint32_t time_spill = 0;
+            	int32_t time_spill = 0;
                 if(a->act_time > a->time)
                 {
                 	time_spill = a->act_time - a->time;
@@ -420,7 +420,7 @@ static void anim_timer(lv_timer_t * param)
  * e.g. repeat, play back, delete etc.
  * @param a pointer to an animation descriptor
  */
-static void anim_ready_handler(lv_anim_t * a, int time_spill)
+static void anim_ready_handler(lv_anim_t * a, int32_t time_spill)
 {
     /*In the end of a forward anim decrement repeat cnt.*/
     if(a->playback_now == 0 && a->repeat_cnt > 0 && a->repeat_cnt != LV_ANIM_REPEAT_INFINITE) {
